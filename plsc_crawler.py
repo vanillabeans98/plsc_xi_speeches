@@ -26,7 +26,6 @@ def read_url(my_url):
 
     Returns: the html
     '''
-
     pm = urllib3.PoolManager(
         cert_reqs='CERT_REQUIRED',
         ca_certs=certifi.where())
@@ -43,7 +42,6 @@ def is_absolute_url(url):
 
     Returns: boolean
     '''
-
     if url == "":
         return False
     return urllib.parse.urlparse(url).netloc != ""
@@ -84,8 +82,6 @@ def convert_if_relative_url(new_url, main_url=MAIN_URL):
         return "http://" + new_url
     else:
         return urllib.parse.urljoin(main_url, new_url)
-
-# find all speeches link
 
 
 def get_article_link_one_page(search_url):
@@ -144,7 +140,6 @@ def extract_text_date(article_link):
         '\n', '').replace('\xa0', '')
 
     # date
-    # attempt 1: locate date within text [last line]
     date_tag = soup.find("div", class_="d2txt_con clearfix").find_all("p")[-1]
     date_processed = re.search(
         "([\d]{4})[\u4e00-\u9fff]+([\d]{2})[\u4e00-\u9fff]+([\d]{2})", date_tag.text)

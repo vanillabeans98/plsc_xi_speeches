@@ -23,7 +23,6 @@ def custom_tokenize(text):
     Uses 'accurate mode (cut_all=False)' when tokenizing chinese words.
     '''
     text_no_num = re.sub(r'[0-9]', '', text)
-
     text_no_punctuation = re.sub(r'[^\w]', '', text_no_num)
 
     return jieba.lcut(text_no_punctuation, cut_all=False)
@@ -31,10 +30,10 @@ def custom_tokenize(text):
 
 def process_data(datafile=TEXT_DATA):
     '''
-    Takes in csv containing raw data, and return df grouped by month for all
-    speeches
+    Takes in csv containing raw data, and return a df grouping speeches by month
     '''
     df = pd.read_csv(TEXT_DATA)
+
     # convert to datetime object and extract month
     df['Date'] = pd.to_datetime(df['Date'], format='%Y-%m-%d')
     df['Month'] = df['Date'].dt.month
@@ -51,13 +50,11 @@ def process_data(datafile=TEXT_DATA):
 
 def breakdown_by_month(datafile=TEXT_DATA):
     '''
-    See how many speeches were made in a month
+    Return number of speeches made per month in tabular form.
     '''
-
     df = pd.read_csv(TEXT_DATA)
     df['Date'] = pd.to_datetime(df['Date'], format='%Y-%m-%d')
     df['Month'] = df['Date'].dt.month
-
     df_month = df.groupby('Month').count()
 
     return df_month.T
@@ -65,10 +62,10 @@ def breakdown_by_month(datafile=TEXT_DATA):
 
 def get_most_common_terms(datafile=TEXT_DATA, n=100):
     '''
-    To determine possible stop words。
+    To determine possible stop words.
 
-    Code used: https://medium.com/@cristhianboujon/how-to-list-the-most-common-words-from-text-corpus-using-scikit-learn-dad4d0cab41d
-
+    Code referenced: 
+    https://medium.com/@cristhianboujon/how-to-list-the-most-common-words-from-text-corpus-using-scikit-learn-dad4d0cab41d
     '''
     df_month = process_data(datafile=TEXT_DATA)
     speech_by_month = [df_month.Text.loc[i] for i in range(0, 12)]
@@ -88,9 +85,9 @@ def get_most_common_terms(datafile=TEXT_DATA, n=100):
 
 def get_top_k_tokens(datafile=TEXT_DATA):
     '''
-    Get top k tokens from each month.
-    Corpus refers to all speeches.
-    Code referenced: https://programminghistorian.org/en/lessons/analyzing-documents-with-tfidf
+    Create a csv for each month, sorting terms by their TF-IDF scores.
+    Code referenced: 
+    https://programminghistorian.org/en/lessons/analyzing-documents-with-tfidf
     '''
     df_month = process_data(datafile=TEXT_DATA)
     speech_by_month = [df_month.Text.loc[i] for i in range(0, 12)]

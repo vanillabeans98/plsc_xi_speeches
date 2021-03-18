@@ -13,22 +13,22 @@ SUMMARY_STATS = "summary_stat.csv"
 
 CATEGORIES = {"economy": ("复工", "发展", "产业", "建设", "企业家", "投行", "企业",
                           "经济", "市场", "市场主体", "工商户", "基础设施", "循环",
-                          "经济特区", "深圳", "改革", "开放", "劳动", "改革", "现代化",
-                          "工人阶级", "开发", "生产", "收入", "资金"),
+                          "经济特区", "深圳", "改革", "开放", "劳动", "改革",
+                          "现代化", "工人阶级", "开发", "生产", "收入", "资金"),
               "covid": ("疫情", "防控", "救治", "湖北", "患者", "应急", "公共卫生",
-                        "武汉", "医疗", "疫情", "世卫", "抗疫", "生命", "新冠", "传染病",
-                        "健康", "联防", "联控", "医务人员", "肺炎", "卫生", "抗疫",
-                        "亚太经合组织"),
-              "poverty": ("脱贫", "扶贫", "攻坚", "贫困人口", "贫困地区", "摘帽", "贫困",
-                          "贫困县", "建档立卡", "减贫", "贫困村", "帮扶", "攻坚战",
-                          "脱贫致富")}
+                        "武汉", "医疗", "疫情", "世卫", "抗疫", "生命", "新冠",
+                        "传染病", "健康", "联防", "联控", "医务人员", "肺炎", "卫生",
+                        "抗疫", "亚太经合组织"),
+              "poverty": ("脱贫", "扶贫", "攻坚", "贫困人口", "贫困地区", "摘帽",
+                          "贫困", "贫困县", "建档立卡", "减贫", "贫困村", "帮扶",
+                          "攻坚战", "脱贫致富")}
 
 
 def get_stats(processed_data=PROCESSED_DIR, n=30, summary_stats="summary_stat.csv"):
     '''
-    Generate a summary statistics csv file
+    Generate a summary statistics csv file with the covid, poverty and economy
+    scores for each month
     '''
-
     with open(summary_stats, "w") as f:
         csvwriter = csv.writer(f)
         csvwriter.writerow(
@@ -57,6 +57,7 @@ def get_stats(processed_data=PROCESSED_DIR, n=30, summary_stats="summary_stat.cs
 
 def plotgraph(summary_stats=SUMMARY_STATS):
     '''
+    Generate graphs for the change in TF-IDF scores over time.
     '''
     # import data
     data = pd.read_csv(summary_stats)
@@ -64,10 +65,10 @@ def plotgraph(summary_stats=SUMMARY_STATS):
 
     fig = plt.figure()
     plt.plot(data['economy_score'], color="pink", label="Economy Score")
-    # plt.plot(data['covid_score'], color="blue", label="COVID-19 Score")
-    # plt.plot(data['poverty_score'], color="orange", label="Poverty Score")
+    plt.plot(data['covid_score'], color="blue", label="COVID-19 Score")
+    plt.plot(data['poverty_score'], color="orange", label="Poverty Score")
 
-    plt.title("Fig 3: Emphasis on Economic Development in 2020")
+    plt.title("Fig 1: Political attention on various national issues in 2020")
     plt.xlabel("Month")
     plt.ylabel("Total TF-IDF \nScore of   \nTop 30 Terms",
                rotation=0, ha="right")
